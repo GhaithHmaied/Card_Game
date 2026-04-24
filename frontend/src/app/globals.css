@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --felt-green: #1a5c2e;
+  --card-back: #1e3a5f;
+  --gold: #d4a843;
+}
+
+body {
+  @apply bg-felt-dark text-white;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Card table felt texture */
+.table-felt {
+  background: radial-gradient(ellipse at center, #1a5c2e 0%, #0f3d1d 70%);
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.3);
+}
+
+/* Card styling */
+.playing-card {
+  @apply rounded-lg shadow-lg transition-all duration-200;
+  width: 70px;
+  height: 100px;
+  perspective: 1000px;
+}
+
+.playing-card:hover {
+  @apply -translate-y-2 shadow-xl;
+}
+
+.playing-card.selected {
+  @apply -translate-y-4 ring-2 ring-gold;
+}
+
+.card-back {
+  @apply rounded-lg;
+  background: linear-gradient(135deg, #1e3a5f, #2c5282);
+  border: 2px solid #4a7ab5;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 5px,
+      rgba(255,255,255,0.03) 5px,
+      rgba(255,255,255,0.03) 10px
+    );
+}
+
+/* Suit colors */
+.suit-hearts, .suit-diamonds {
+  @apply text-red-600;
+}
+.suit-spades, .suit-clubs {
+  @apply text-gray-900;
+}
+
+/* Player positions around the table */
+.player-south { @apply absolute bottom-4 left-1/2 -translate-x-1/2; }
+.player-north { @apply absolute top-4 left-1/2 -translate-x-1/2; }
+.player-west  { @apply absolute left-4 top-1/2 -translate-y-1/2; }
+.player-east  { @apply absolute right-4 top-1/2 -translate-y-1/2; }
+
+/* Responsive cards on mobile */
+@media (max-width: 640px) {
+  .playing-card {
+    width: 50px;
+    height: 72px;
+  }
+}

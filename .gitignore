@@ -1,0 +1,5 @@
+# Next.js optional native binary (recreated by npm install)
+frontend/node_modules/@next/swc-win32-x64-msvc/
+
+# Local git history helper scripts (not part of the app)
+scripts/

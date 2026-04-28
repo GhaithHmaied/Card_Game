@@ -215,6 +215,8 @@ export class GameManagerService {
     trickComplete: boolean;
     roundComplete: boolean;
     gameOver: boolean;
+    /** Present when trickComplete; needed after roundComplete because state.completedTricks is cleared. */
+    lastCompletedTrick?: Trick;
   }> {
     const state = await this.getState(gameId);
     this.assertPhase(state, GamePhase.Playing);
@@ -253,6 +255,7 @@ export class GameManagerService {
     let trickComplete = false;
     let roundComplete = false;
     let gameOver = false;
+    let lastCompletedTrick: Trick | undefined;
 
     // Check if trick is complete (4 cards played)
     if (state.currentTrick.cards.length === 4) {
@@ -269,6 +272,8 @@ export class GameManagerService {
       );
 
       state.completedTricks.push({ ...state.currentTrick });
+      lastCompletedTrick =
+        state.completedTricks[state.completedTricks.length - 1];
       state.trickCount++;
 
       // Check if round is complete (8 tricks)
@@ -331,7 +336,7 @@ export class GameManagerService {
       roundComplete,
     });
 
-    return { state, trickComplete, roundComplete, gameOver };
+    return { state, trickComplete, roundComplete, gameOver, lastCompletedTrick };
   }
 
   // ================================================================

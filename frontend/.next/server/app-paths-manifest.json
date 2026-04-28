@@ -1,7 +1,5 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/history/page": "app/history/page.js",
-  "/leaderboard/page": "app/leaderboard/page.js",
-  "/game/[roomId]/page": "app/game/[roomId]/page.js"
+  "/game/[roomId]/page": "app/game/[roomId]/page.js",
+  "/offline/page": "app/offline/page.js"
 }

@@ -6,7 +6,7 @@ import { BiddingService } from './engine/bidding.service';
 import { TrickService } from './engine/trick.service';
 import { ScoreService } from './engine/score.service';
 import { ValidationService } from './engine/validation.service';
-import { GameState, Contract, PlayCardPayload, PlaceBidPayload } from '../common/types';
+import { GameState, Trick, Contract, PlayCardPayload, PlaceBidPayload } from '../common/types';
 export declare class GameManagerService {
     private readonly redisService;
     private readonly queueService;
@@ -31,6 +31,7 @@ export declare class GameManagerService {
         trickComplete: boolean;
         roundComplete: boolean;
         gameOver: boolean;
+        lastCompletedTrick?: Trick;
     }>;
     handleReconnect(playerId: string, gameId: string): Promise<GameState | null>;
     handleDisconnect(playerId: string, gameId: string, gracePeriodMs: number): Promise<void>;

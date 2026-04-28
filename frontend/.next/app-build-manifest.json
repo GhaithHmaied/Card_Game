@@ -21,20 +21,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/game/layout.js"
     ],
-    "/history/page": [
+    "/offline/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/history/page.js"
+      "static/chunks/app/offline/page.js"
     ],
-    "/leaderboard/page": [
+    "/offline/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/leaderboard/page.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/offline/layout.js"
     ]
   }
 }

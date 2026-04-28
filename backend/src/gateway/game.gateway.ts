@@ -324,9 +324,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         currentTurn: result.state.currentTurn,
       });
 
-      if (result.trickComplete) {
-        const lastTrick =
-          result.state.completedTricks[result.state.completedTricks.length - 1];
+      if (result.trickComplete && result.lastCompletedTrick) {
+        const lastTrick = result.lastCompletedTrick;
         this.server.to(payload.roomId).emit(ServerEvent.TrickWon, {
           winnerId: lastTrick.winnerId,
           winnerTeam: lastTrick.winnerTeam,
@@ -356,8 +355,14 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
           if (firstBidder) {
             const sid = await this.redisService.getPlayerSocket(firstBidder.id);
             if (sid) {
+              const view = this.gameManager.getPlayerView(
+                result.state,
+                firstBidder.id,
+              );
               this.server.to(sid).emit(ServerEvent.YourTurn, {
                 phase: result.state.phase,
+                hand: view.players.find((p: any) => p.id === firstBidder.id)
+                  ?.hand,
               });
             }
           }

@@ -159,12 +159,15 @@ let GameManagerService = GameManagerService_1 = class GameManagerService {
         let trickComplete = false;
         let roundComplete = false;
         let gameOver = false;
+        let lastCompletedTrick;
         if (state.currentTrick.cards.length === 4) {
             trickComplete = true;
             const winner = this.trickService.resolveTrick(state.currentTrick, state.contract.suit);
             state.currentTrick.winnerId = winner.playerId;
             state.currentTrick.winnerTeam = this.trickService.getWinnerTeam(winner.playerId, state);
             state.completedTricks.push({ ...state.currentTrick });
+            lastCompletedTrick =
+                state.completedTricks[state.completedTricks.length - 1];
             state.trickCount++;
             if (state.trickCount === 8) {
                 roundComplete = true;
@@ -214,7 +217,7 @@ let GameManagerService = GameManagerService_1 = class GameManagerService {
             trickComplete,
             roundComplete,
         });
-        return { state, trickComplete, roundComplete, gameOver };
+        return { state, trickComplete, roundComplete, gameOver, lastCompletedTrick };
     }
     async handleReconnect(playerId, gameId) {
         const state = await this.redisService.getGameState(gameId);

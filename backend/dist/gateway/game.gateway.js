@@ -211,8 +211,8 @@ let GameGateway = GameGateway_1 = class GameGateway {
                 card: payload.card,
                 currentTurn: result.state.currentTurn,
             });
-            if (result.trickComplete) {
-                const lastTrick = result.state.completedTricks[result.state.completedTricks.length - 1];
+            if (result.trickComplete && result.lastCompletedTrick) {
+                const lastTrick = result.lastCompletedTrick;
                 this.server.to(payload.roomId).emit(types_1.ServerEvent.TrickWon, {
                     winnerId: lastTrick.winnerId,
                     winnerTeam: lastTrick.winnerTeam,
@@ -237,8 +237,11 @@ let GameGateway = GameGateway_1 = class GameGateway {
                     if (firstBidder) {
                         const sid = await this.redisService.getPlayerSocket(firstBidder.id);
                         if (sid) {
+                            const view = this.gameManager.getPlayerView(result.state, firstBidder.id);
                             this.server.to(sid).emit(types_1.ServerEvent.YourTurn, {
                                 phase: result.state.phase,
+                                hand: view.players.find((p) => p.id === firstBidder.id)
+                                    ?.hand,
                             });
                         }
                     }

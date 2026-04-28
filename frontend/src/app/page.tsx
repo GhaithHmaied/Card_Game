@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
 
@@ -16,6 +17,12 @@ export default function HomePage() {
       <div className="text-center mb-12">
         <h1 className="text-6xl font-bold text-gold mb-2">🃏 Coinché</h1>
         <p className="text-lg text-white/70">Belote Coinchée — Play Online</p>
+        <Link
+          href="/offline"
+          className="inline-block mt-6 text-gold hover:text-yellow-300 text-sm font-medium underline underline-offset-4"
+        >
+          Practice offline (vs bots, no server)
+        </Link>
       </div>
 
       {isLoggedIn ? (

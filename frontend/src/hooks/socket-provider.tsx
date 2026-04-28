@@ -17,7 +17,7 @@ type SocketContextValue = {
   emit: (event: string, data: unknown) => Promise<unknown>;
 };
 
-const GameSocketContext = createContext<SocketContextValue | null>(null);
+export const GameSocketContext = createContext<SocketContextValue | null>(null);
 
 /**
  * Mount once under `app/game/layout` so game UI shares one Socket.IO connection.
@@ -71,6 +71,9 @@ export function GameSocketProvider({ children }: { children: ReactNode }) {
 
     newSocket.on('game:cards_dealt', (gameState: any) => {
       const gs = useGameStore.getState();
+      // New deal (including after a full round): reset trick UI from previous round
+      gs.clearTrick();
+      gs.setLastTrickWinner(null);
       gs.setGameId(gameState.id);
       gs.setPhase(gameState.phase);
       gs.setCurrentTurn(gameState.currentTurn);
@@ -80,6 +83,11 @@ export function GameSocketProvider({ children }: { children: ReactNode }) {
       const me = gameState.players.find((p: any) => p.id === userId);
       if (me?.hand) gs.setMyHand(me.hand.filter(Boolean) as any);
       useGameStore.setState({ currentBids: [] });
+      // Derive turn from state so bidding still works if game:your_turn is delayed or dropped
+      const current = gameState.players.find(
+        (p: any) => p.seat === gameState.currentTurn,
+      );
+      gs.setIsMyTurn(current?.id === userId);
     });
 
     newSocket.on('game:bid_made', (data: any) => {
@@ -181,7 +189,9 @@ export function GameSocketProvider({ children }: { children: ReactNode }) {
 export function useSocket() {
   const ctx = useContext(GameSocketContext);
   if (!ctx) {
-    throw new Error('useSocket must be used within GameSocketProvider (game routes)');
+    throw new Error(
+      'useSocket must be used within GameSocketProvider or OfflineGameSocketProvider',
+    );
   }
   return ctx;
 }
